@@ -225,6 +225,7 @@
             caloriesInput.Size = new Size(121, 23);
             caloriesInput.TabIndex = 13;
             caloriesInput.SelectedIndexChanged += Less_CheckedChanged;
+            caloriesInput.SelectedIndexChanged += More_CheckedChanged;
             // 
             // more
             // 
