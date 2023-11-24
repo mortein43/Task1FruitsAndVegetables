@@ -8,20 +8,22 @@ using Microsoft.Data.Sqlite;
 
 public partial class Form1 : Form
 {
-    private readonly string connectionString = "Data Source= FruitsAndVegetables.sqlite;";
+    private string connectionString = "Data Source= FruitsAndVegetables.sqlite;";
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Form1"/> class.
+    /// Initializes a new  instance of the <see cref="Form1"/> class.
     /// </summary>
     public Form1()
     {
         this.InitializeComponent();
         this.colorInput.SelectedIndex = 0;
         this.caloriesInput.SelectedIndex = 0;
-        _ = this.ClearDataBase();
+    }
+
+    private void Form1_Load(object sender, EventArgs e)
+    {
         _ = this.CreateDataBase();
         _ = this.CreateTable();
-        _ = this.TableFilling();
         _ = this.LoadData();
     }
 
@@ -44,17 +46,31 @@ public partial class Form1 : Form
         using SqliteConnection connection = new (this.connectionString);
         await connection.OpenAsync();
 
-        SqliteCommand command = new ()
+        SqliteCommand checkTableCommand = new ()
         {
-            CommandText = "CREATE TABLE AllFruitsAndVegetables (Id INTEGER AUTOINCREMENT, Name NVARCHAR(255), Type NVARCHAR(255), Color NVARCHAR(255), Caloric INT)",
+            CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='AllFruitsAndVegetables';",
             Connection = connection,
         };
-        await command.ExecuteNonQueryAsync();
+
+        var result = await checkTableCommand.ExecuteScalarAsync();
+
+        if (result == null)
+        {
+            SqliteCommand createTableCommand = new ()
+            {
+                CommandText = "CREATE TABLE AllFruitsAndVegetables (Id INTEGER PRIMARY KEY AUTOINCREMENT, Name NVARCHAR(255), Type NVARCHAR(255), Color NVARCHAR(255), Caloric INT)",
+                Connection = connection,
+            };
+
+            await createTableCommand.ExecuteNonQueryAsync();
+
+            await this.TableFilling();
+        }
     }
 
     private async Task TableFilling()
     {
-        string sqliteExpression = "INSERT INTO AllFruitsAndVegetables (Name, Type, Color, Caloric)  VALUES " +
+        string sqliteExpression = "INSERT OR IGNORE INTO AllFruitsAndVegetables (Name, Type, Color, Caloric)  VALUES " +
             "('Pineapple', 'Fruit', 'Yellow', 54), " +
             "('Apple', 'Fruit', 'Red', 46), " +
             "('Pear', 'Fruit', 'Yellow', 54), " +
@@ -70,16 +86,6 @@ public partial class Form1 : Form
         await connection.OpenAsync();
         SqliteCommand command = new (sqliteExpression, connection);
         await command.ExecuteNonQueryAsync();
-    }
-
-    private async Task ClearDataBase()
-    {
-        string sqliteExpression = "DELETE FROM AllFruitsAndVegetables";
-
-        using SqliteConnection connection = new (this.connectionString);
-        await connection.OpenAsync();
-        SqliteCommand command = new (sqliteExpression, connection);
-        _ = command.ExecuteNonQueryAsync();
     }
 
     private async Task LoadData()

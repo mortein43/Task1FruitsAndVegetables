@@ -60,9 +60,9 @@
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Dock = DockStyle.Bottom;
-            dataGridView1.Location = new Point(0, 197);
+            dataGridView1.Location = new Point(0, 178);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(546, 270);
+            dataGridView1.Size = new Size(546, 317);
             dataGridView1.TabIndex = 0;
             // 
             // radioAll
@@ -305,7 +305,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(546, 467);
+            ClientSize = new Size(546, 495);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(calorieRange);
@@ -329,6 +329,7 @@
             Controls.Add(dataGridView1);
             Name = "Form1";
             Text = "Form1";
+            Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
