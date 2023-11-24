@@ -171,6 +171,7 @@
             colorInput.Size = new Size(121, 23);
             colorInput.TabIndex = 9;
             colorInput.SelectedIndexChanged += AllOfGivenColor_CheckedChanged;
+            colorInput.SelectedIndexChanged += AllForColor_CheckedChanged;
             // 
             // sqliteCommand1
             // 
